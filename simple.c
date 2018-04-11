@@ -9,8 +9,8 @@
  */
 
 static const char *JSON_STRING =
-	"{\"user\": \"johndoe\", \"admin\": false, \"uid\": 1000,\n  "
-	"\"groups\": [\"users\", \"wheel\", \"audio\", \"video\"]}";
+	"{\"user\": \"yukyoung\", \"admin\": false, \"uid\":21700549,\n  "
+	"\"groups\": [\"handong\", \"anjung\", \"427\", \"computer\"]}";
 
 static int jsoneq(const char *json, jsmntok_t *tok, const char *s) {
 	if (tok->type == JSMN_STRING && (int) strlen(s) == tok->end - tok->start &&
@@ -25,9 +25,9 @@ int main() {
 	int r;
 	jsmn_parser p;
 	jsmntok_t t[128]; /* We expect no more than 128 tokens */
-	printf("============");
+	printf("============\n");
 	printf("%s",JSON_STRING);
-        printf("============");
+        printf("============\n");
 
 	jsmn_init(&p);
 	r = jsmn_parse(&p, JSON_STRING, strlen(JSON_STRING), t, sizeof(t)/sizeof(t[0]));
