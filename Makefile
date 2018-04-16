@@ -25,6 +25,12 @@ test_strict_links: test/tests.c
 
 jsmn_test.o: jsmn_test.c libjsmn.a
 
+debug_example : simple_example
+debug_example : D_OPTION = -DDEBUG_MODE
+
+%.o: %.c jsmn.h
+	 $(CC) $(D_OPTION) -c $(CFLAGS) $< -o $@
+
 simple_example: example/simple.o libjsmn.a
 	$(CC) $(LDFLAGS) $^ -o $@
 
@@ -40,6 +46,6 @@ clean:
 	rm -f *.a *.so
 	rm -f simple_example
 	rm -f jsondump
-
+	
 .PHONY: all clean test
 
