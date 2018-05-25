@@ -1,0 +1,3 @@
+{"user": "yukyoung", "admin": false, "uid":21700549,
+  "groups": ["handong", "anjung", "427", "260"]}
+
