@@ -14,7 +14,7 @@ static const char *JSON_STRING =
 */
 
 char * readjsonfile();
-
+static char * JSON_STRING;
 static int jsoneq(const char *json, jsmntok_t *tok, const char *s) {
 	if (tok->type == JSMN_STRING && (int) strlen(s) == tok->end - tok->start &&
 			strncmp(json + tok->start, s, tok->end - tok->start) == 0) {
@@ -26,7 +26,8 @@ static int jsoneq(const char *json, jsmntok_t *tok, const char *s) {
 int main() {
 	int i;
 	int r;
-	char*JSON_STRING = readjsonfile();
+	JSON_STRING = readjsonfile();
+	printf("%s \n",JSON_STRING);	
 	jsmn_parser p;
 	jsmntok_t t[128]; /* We expect no more than 128 tokens */
 #ifdef DEBUG_MODE
@@ -93,30 +94,16 @@ int main() {
 
 char * readjsonfile(){
   char * line;
-  char * temp;
-  char * del_line_p;
-  int N, i, n=0;
-  char c;
+  char temp[200];
 
-  FILE *fp1;
-  fp1=fopen("data.txt","r");
-  while((c=fgetc(fp1))!=EOF)
-    if(c=='\n') n++;
-  fclose(fp1);
-	temp = (char *)malloc(sizeof(char));
   line = (char *)malloc(sizeof(char));
   FILE * fp;
   fp = fopen("data.txt", "rt");
-  fgets(line, sizeof(line), fp);
-  if ((del_line_p = (char*)strchr(line, '\n')) != NULL)*del_line_p = '\0';
-  strcpy(temp,line);
- while(i<n){    i++;
-    fgets(line, sizeof(line), fp);
-    if ((del_line_p = (char*)strchr(line, '\n')) != NULL)*del_line_p = '\0';
-    N=strlen(temp);
-    temp = (char *) realloc(temp, strlen(line));
-    strncpy(temp+N,line,strlen(line));
-  }
-	fclose(fp);
-  return temp;
+   while(fgets(temp, sizeof(temp), fp) != NULL){
+        temp[strlen(temp)-1]== '\n';//temp의 엔터값 삭제 하고 이어붙인다.
+  	line = (char*)realloc(line,strlen(line) + strlen(temp));
+	strcat(line,temp);
+  }	
+  fclose(fp);
+  return line;
 }
