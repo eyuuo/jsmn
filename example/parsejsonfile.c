@@ -14,6 +14,8 @@ static const char *JSON_STRING =
 */
 void printkeys(const char *json, jsmntok_t *t, int tokcount);
 char * readjsonfile(const char * filename);
+int findkeys(const char *json, jsmntok_t *t, int tokcount, int *keys);
+void printvalues(const char *json, jsmntok_t *t, int tokcount,int *keys);
 void printall(const char *json, jsmntok_t * t, int tokcount);
 static char * JSON_STRING;
 static int jsoneq(const char *json, jsmntok_t *tok, const char *s) {
@@ -24,13 +26,16 @@ static int jsoneq(const char *json, jsmntok_t *tok, const char *s) {
 	return -1;
 }
 
-int main() {
+int main(int argc,char * argv[]) {
 	int i;
 	int r;
 	char typename[5][20]=
  {"JSMN_UNDEFINED","JSMN_OBJECT","JSMN_ARRAY","JSMN_STRING","JSMN_PRIMITIVE"};
-  
+	int keyarray[128], keyamount;
+	if(argc==1)
 	JSON_STRING = readjsonfile("data.json");
+	else 
+	JSON_STRING = readjsonfile(argv[1]);
 	printf("%s \n",JSON_STRING);	
 	jsmn_parser p;
 	jsmntok_t t[128]; /* We expect no more than 128 tokens */
@@ -54,7 +59,9 @@ int main() {
 	printf("\n------------------------------\n");
 	printkeys(JSON_STRING, t,r);
 	printf("\n------------------------------\n");
-
+	keyamount = findkeys(JSON_STRING, t, r, keyarray);
+	printvalues(JSON_STRING, t, r, keyarray);
+	printf("\n------------------------------\n");
 	if (r < 0) {
 		printf("Failed to parse JSON: %d\n", r);
 		return 1;
@@ -122,6 +129,50 @@ int main() {
 	return EXIT_SUCCESS;
 }
 
+
+int findkeys(const char *json, jsmntok_t *t, int tokcount, int *keys){
+	 char typename[5][20]=
+ {"JSMN_UNDEFINED","JSMN_OBJECT","JSMN_ARRAY","JSMN_STRING","JSMN_PRIMITIVE"};
+	int n = 0;
+	int i;
+	for(i=1;i<tokcount;i++) 
+	{
+	if(t[i].size==1)
+        if(strcmp(typename[t[i].type],"JSMN_ARRAY")!=0)
+        if(strcmp(typename[t[i].type],"JSMN_OBJECT")!=0)
+       		{
+		 keys[n]=i;
+	//	printf("---------------%d\n",keys[n]);
+		 n++;	
+			
+		}
+        }
+	
+	return n;
+}
+void printvalues(const char *json, jsmntok_t *t, int tokcount,int *keys){
+	 int n = 0;
+	int i,j,k;k=0;
+	while(1){
+	if(keys[k]==NULL)break;
+	k++;
+	}
+	int len =k ;
+//printf(">>>>>>>>>>>>>>>>>>>>>>>%d",len);
+	printf("printvalues : \n");
+        for(j=0;j<len;j++)
+	{ 
+	 for(i=1;i<tokcount;i++)
+        {
+           if(i==keys[j])
+  printf(" %.*s (%d) \n",t[i].end-t[i].start,json + t[i].start,i);
+       	        
+        }
+	}
+
+}
+
+
 void printkeys(const char *json, jsmntok_t *t, int tokcount){
   int i;
   int n =0;
@@ -133,6 +184,7 @@ void printkeys(const char *json, jsmntok_t *t, int tokcount){
 	if(strcmp(typename[t[i].type],"JSMN_ARRAY")!=0)
 	if(strcmp(typename[t[i].type],"JSMN_OBJECT")!=0)
 	{
+	
 	n++;
 	printf("[%2d] %.*s (%d) \n",n,t[i].end-t[i].start,json + t[i].start,i);
 	}	
