@@ -12,8 +12,9 @@ static const char *JSON_STRING =
 	"{\"user\": \"yukyoung\", \"admin\": false, \"uid\":21700549,\n  "
 	"\"groups\": [\"handong\", \"anjung\", \"427\", \"260\"]}";
 */
-
-char * readjsonfile();
+void printkeys(const char *json, jsmntok_t *t, int tokcount);
+char * readjsonfile(const char * filename);
+void printall(const char *json, jsmntok_t * t, int tokcount);
 static char * JSON_STRING;
 static int jsoneq(const char *json, jsmntok_t *tok, const char *s) {
 	if (tok->type == JSMN_STRING && (int) strlen(s) == tok->end - tok->start &&
@@ -26,7 +27,10 @@ static int jsoneq(const char *json, jsmntok_t *tok, const char *s) {
 int main() {
 	int i;
 	int r;
-	JSON_STRING = readjsonfile();
+	char typename[5][20]=
+ {"JSMN_UNDEFINED","JSMN_OBJECT","JSMN_ARRAY","JSMN_STRING","JSMN_PRIMITIVE"};
+  
+	JSON_STRING = readjsonfile("data.json");
 	printf("%s \n",JSON_STRING);	
 	jsmn_parser p;
 	jsmntok_t t[128]; /* We expect no more than 128 tokens */
@@ -43,6 +47,14 @@ int main() {
 		printf("[%2d] (%d) %d~%d, size:%d\n", i, t[i].type, t[i].start,t[i].end, t[i].size);
 	}	
 #endif 
+//-----------------------------------------------------------//
+	printall(JSON_STRING, t,r);
+//-----------------------------------------------------------//
+
+	printf("\n------------------------------\n");
+	printkeys(JSON_STRING, t,r);
+	printf("\n------------------------------\n");
+
 	if (r < 0) {
 		printf("Failed to parse JSON: %d\n", r);
 		return 1;
@@ -83,22 +95,76 @@ int main() {
 			}
 			i += t[i+1].size + 1;
 		} else {
-			printf("Unexpected key: %.*s\n", t[i].end-t[i].start,
-					JSON_STRING + t[i].start);
-		}
+		if(t[i].size==1)
+		if(strcmp(typename[t[i].type],"JSMN_ARRAY")!=0)
+        	if(strcmp(typename[t[i].type],"JSMN_OBJECT")!=0)
+		{	
+      	printf("- %.*s : \n",t[i].end-t[i].start,JSON_STRING+ t[i].start);
+       		}
+		if(strcmp(typename[t[i+1].type],"JSMN_ARRAY")!=0)
+		printf("{");
+		//if(strcmp(typename[t[i+1].type],"JSMN_OBJECT")!=0)
+               // printf("[");
+		if(t[i+1].size==0)
+                {
+        printf("-> %.*s ", t[i+1].end-t[i+1].start,JSON_STRING + t[i+1].start);
+		//if(strcmp(typename[t[i+1].type],"JSMN_OBJECT")!=0)
+               // printf("]");
+		if(strcmp(typename[t[i+1].type],"JSMN_ARRAY")!=0)
+                printf("}");
+
+		 printf("\n");
+                       i++;
+                 }
+			
+	    }
 	}
 	return EXIT_SUCCESS;
 }
 
+void printkeys(const char *json, jsmntok_t *t, int tokcount){
+  int i;
+  int n =0;
+  char typename[5][20]=
+  {"JSMN_UNDEFINED","JSMN_OBJECT","JSMN_ARRAY","JSMN_STRING","JSMN_PRIMITIVE"};
+  printf("***** All keys *****\n");
+  for(i=1;i<tokcount;i++) {
+    if(t[i].size==1)
+	if(strcmp(typename[t[i].type],"JSMN_ARRAY")!=0)
+	if(strcmp(typename[t[i].type],"JSMN_OBJECT")!=0)
+	{
+	n++;
+	printf("[%2d] %.*s (%d) \n",n,t[i].end-t[i].start,json + t[i].start,i);
+	}	
+  
+  }
+  printf("\n");
+}
+ 
+
+void printall(const char *json, jsmntok_t * t, int tokcount){
+  int i;
+  char typename[5][20]=
+ {"JSMN_UNDEFINED","JSMN_OBJECT","JSMN_ARRAY","JSMN_STRING","JSMN_PRIMITIVE"};
+  printf("***** All Tokens *****\n");
+  for(i=1;i<tokcount;i++) {
+    #ifdef JSMN_PARENT_LINKS
+    printf("[%2d] %.*s (size=%d, %d~%d, %s) P=%d\n",i,t[i].end-t[i].start,json + t[i].start, t[i].size, t[i].start, t[i].end, typename[t[i].type],t[i].parent);
+    #else
+    printf("[%2d] %.*s (size=%d, %d~%d, %s) \n",i,t[i].end-t[i].start,json + t[i].start, t[i].size, t[i].start, t[i].end, typename[t[i].type]);
+    #endif
+  }
+  printf("\n");
+};
 
 
-char * readjsonfile(){
+char * readjsonfile(const char * filename){
   char * line;
   char temp[200];
 
   line = (char *)malloc(sizeof(char));
   FILE * fp;
-  fp = fopen("data.txt", "rt");
+  fp = fopen(filename, "rt");
    while(fgets(temp, sizeof(temp), fp) != NULL){
         temp[strlen(temp)-1]== '\n';//temp의 엔터값 삭제 하고 이어붙인다.
   	line = (char*)realloc(line,strlen(line) + strlen(temp));
