@@ -1,0 +1,63 @@
+{
+"food"
+  [
+    {
+      "name":"Cream pasta",
+      "size":"For 1 Person",
+      "price":8000
+    },
+    {
+      "name":"Alio pasta",
+      "size":"For 1 Person",
+      "price":9000
+    },
+    {
+      "name":"Rosé pasta",
+      "size":"For 1 Person",
+      "price":8000
+    },
+    {
+      "name":"Tomato pasta",
+      "size":"For 1 Person",
+      "price":7000
+    },
+    {
+      "name":"Shrimp chili tomato pasta",
+      "size":"For 1 Person",
+      "price":10000
+    },
+    {
+      "name":"Blue lemonade",
+      "size":"A drink",
+      "price":5000
+    },
+    {
+      "name":"Pepsi coke",
+      "size":"A drink",
+      "price":4000
+    }
+  ],
+  [
+    "set_menu":
+    {
+      "name":"summer_set",
+      "size":"for 2 Person",
+      "menu":"Tomato pasta+Shrimp chili tomato pasta+Blue lemonade",
+      "price":19900
+    },
+    "set_menu":
+    {
+      "name":"winter_set",
+      "size":"for 2 Person",
+      "menu":"Alio pasta+Cream pasta+Pesi coke",
+      "price":19900
+    },
+    "set_menu":
+    {
+      "name":"mix_set",
+      "size":"for 2 Person",
+      "menu":"Tomato pasta+Rosé pasta+Cream pasta+Blue lemonade+Pesi coke",
+      "price":29900
+    }
+  ]
+}
