@@ -3,15 +3,8 @@
 #include <string.h>
 #include "../jsmn.h"
 
-/*
- * A small example of jsmn parsing when JSON structure is known and number of
- * tokens is predictable.
- */
-/*
-static const char *JSON_STRING =
-	"{\"user\": \"yukyoung\", \"admin\": false, \"uid\":21700549,\n  "
-	"\"groups\": [\"handong\", \"anjung\", \"427\", \"260\"]}";
-*/
+void printmenu(mymenu_t *m[], int mcount);
+int makemymenu(const char *json, jsmntok_t *t, int tokcount, mymenu_t * m[]);
 void printkeys(const char *json, jsmntok_t *t, int tokcount);
 char * readjsonfile(const char * filename);
 int findkeys(const char *json, jsmntok_t *t, int tokcount, int *keys);
@@ -19,9 +12,9 @@ void printvalues(const char *json, jsmntok_t *t, int tokcount,int *keys);
 void printall(const char *json, jsmntok_t * t, int tokcount);
 static char * JSON_STRING;
 static int jsoneq(const char *json, jsmntok_t *tok, const char *s) {
-	if (tok->type == JSMN_STRING && (int) strlen(s) == tok->end - tok->start &&
-			strncmp(json + tok->start, s, tok->end - tok->start) == 0) {
-		return 0;
+if (tok->type == JSMN_STRING && (int) strlen(s) == tok->end - tok->start &&
+	strncmp(json + tok->start, s, tok->end - tok->start) == 0) {
+	return 0;
 	}
 	return -1;
 }
@@ -32,8 +25,9 @@ int main(int argc,char * argv[]) {
 	char typename[5][20]=
  {"JSMN_UNDEFINED","JSMN_OBJECT","JSMN_ARRAY","JSMN_STRING","JSMN_PRIMITIVE"};
 	int keyarray[128], keyamount;
+
 	if(argc==1)
-	JSON_STRING = readjsonfile("data.txt");
+	JSON_STRING = readjsonfile("mymenu.json");
 	else 
 	JSON_STRING = readjsonfile(argv[1]);
 	printf("%s \n",JSON_STRING);	
@@ -53,15 +47,17 @@ int main(int argc,char * argv[]) {
 	}	
 #endif 
 //-----------------------------------------------------------//
-	printall(JSON_STRING, t,r);
+//	printall(JSON_STRING, t,r);
+	menucount = makemymenu(JSON_STRING, t, r, mymenu);
+	printmenu(mymenu, menucount);
 //-----------------------------------------------------------//
 
-	printf("\n------------------------------\n");
-	printkeys(JSON_STRING, t,r);
-	printf("\n------------------------------\n");
-	keyamount = findkeys(JSON_STRING, t, r, keyarray);
-	printvalues(JSON_STRING, t, r, keyarray);
-	printf("\n------------------------------\n");
+//	printf("\n------------------------------\n");
+//	printkeys(JSON_STRING, t,r);
+//	printf("\n------------------------------\n");
+//	keyamount = findkeys(JSON_STRING, t, r, keyarray);
+//	printvalues(JSON_STRING, t, r, keyarray);
+//	printf("\n------------------------------\n");
 	if (r < 0) {
 		printf("Failed to parse JSON: %d\n", r);
 		return 1;
@@ -128,6 +124,21 @@ int main(int argc,char * argv[]) {
 	}
 	return EXIT_SUCCESS;
 }
+
+
+
+
+int makemymenu(const char *json, jsmntok_t *t, int tokcount, mymenu_t * m[]){
+
+
+
+}
+
+
+void printmenu(mymenu_t *m[], int mcount){
+
+}
+
 
 
 int findkeys(const char *json, jsmntok_t *t, int tokcount, int *keys){
