@@ -33,7 +33,7 @@ int main(int argc,char * argv[]) {
  {"JSMN_UNDEFINED","JSMN_OBJECT","JSMN_ARRAY","JSMN_STRING","JSMN_PRIMITIVE"};
 	int keyarray[128], keyamount;
 	if(argc==1)
-	JSON_STRING = readjsonfile("data.json");
+	JSON_STRING = readjsonfile("data.txt");
 	else 
 	JSON_STRING = readjsonfile(argv[1]);
 	printf("%s \n",JSON_STRING);	

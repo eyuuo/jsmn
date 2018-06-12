@@ -1,5 +1,5 @@
 {
-"food"
+"food" :
   [
     {
       "name":"Cream pasta",
@@ -37,26 +37,21 @@
       "price":4000
     }
   ],
+  "set_menu":
   [
-    "set_menu":
     {
-      "name":"summer_set",
+      "name":"summer_set : Tomato pasta+Shrimp chili tomato pasta+Blue lemonade",
       "size":"for 2 Person",
-      "menu":"Tomato pasta+Shrimp chili tomato pasta+Blue lemonade",
       "price":19900
     },
-    "set_menu":
     {
-      "name":"winter_set",
+      "name":"winter_set : Alio pasta+Cream pasta+Pesi coke",
       "size":"for 2 Person",
-      "menu":"Alio pasta+Cream pasta+Pesi coke",
       "price":19900
     },
-    "set_menu":
     {
-      "name":"mix_set",
+      "name":"mix_set : Tomato pasta+Rosé pasta+Cream pasta+Blue lemonade+Pesi coke",
       "size":"for 2 Person",
-      "menu":"Tomato pasta+Rosé pasta+Cream pasta+Blue lemonade+Pesi coke",
       "price":29900
     }
   ]
